@@ -23,50 +23,50 @@ Ref: https://github.com/tssovi/grokking-the-object-oriented-design-interview
 
       class ShoppingCart {
       public:
-	ShoppingCart() = default;
-	~ShoppingCart() = default;
+      ShoppingCart() = default;
+      ~ShoppingCart() = default;
 
-	void addItem(const string &item_name, int quantity, double price) {
+      void addItem(const string &item_name, int quantity, double price) {
 	  this->total_ += (quantity * price);
 	  this->items_[item_name] = quantity;
-	}
+      }
 
-	void removeItem(const string &item_name, int quantity, double price) {
+      void removeItem(const string &item_name, int quantity, double price) {
 	  if (this->items_.find(item_name) == end(this->items_)) {
-	    // Product not found.
-	    return;
+	  // Product not found.
+	  return;
 	  }
 	  this->total_ -= (quantity * price);
 	  if (quantity > this->items_[item_name]) {
-	    this->items_.erase(item_name);
-	    return;
+	  this->items_.erase(item_name);
+	  return;
 	  }
 	  this->items_[item_name] -= quantity;
-	}
+      }
 
-	string checkout(double cash_paid) {
+      string checkout(double cash_paid) {
 	  if (cash_paid < this->total_) {
-	    return "You paid " + to_string(cash_paid) + " but cart amount is " + to_string(this->total_);
+	  return "You paid " + to_string(cash_paid) + " but cart amount is " + to_string(this->total_);
 	  }
 	  double balance = cash_paid - this->total_;
 	  return "Exchange Amount: " + to_string(balance);
-	}
+      }
 
       private:
-	double total_ = 0.0;
-	// {product_name, quantity}
+      double total_ = 0.0;
+      // {product_name, quantity}
 	unordered_map<string, int> items_;
       };
 
       int main() {
-	ShoppingCart cart;
-	cart.addItem("Apple", 10, 50);
-	cart.addItem("Kiwi", 8, 90);
-	cart.addItem("Bannana", 12, 40);
-	cart.removeItem("Bannana", 2, 5);
-	string cart_out = cart.checkout(2000);
-	cout << cart_out << '\n';
-	return 0;
+      ShoppingCart cart;
+      cart.addItem("Apple", 10, 50);
+      cart.addItem("Kiwi", 8, 90);
+      cart.addItem("Bannana", 12, 40);
+      cart.removeItem("Bannana", 2, 5);
+      string cart_out = cart.checkout(2000);
+      cout << cart_out << '\n';
+      return 0;
       }
     #+end_src
 
@@ -88,27 +88,27 @@ Ref: https://github.com/tssovi/grokking-the-object-oriented-design-interview
 
        class Product {
        public:
-	 Product(double price) : price_(price) {}
-	 ~Product() = default;
+	   Product(double price) : price_(price) {}
+	   ~Product() = default;
 
-	 double sell() {
+	   double sell() {
 	   return this->price_;
-	 }
+	   }
 
-	 void setPrice(double price) {
+	   void setPrice(double price) {
 	   this->price_ = price;
-	 }
-  
+	   }
+
        private:
-	 double price_ = 0;
+	   double price_ = 0;
        };
 
        int main() {
-	 Product product(100);
-	 cout << "Selling Price: " << product.sell() << '\n';
-	 product.setPrice(200);
-	 cout << "Selling Price: " << product.sell() << '\n';
-	 return 0;
+	   Product product(100);
+	   cout << "Selling Price: " << product.sell() << '\n';
+	   product.setPrice(200);
+	   cout << "Selling Price: " << product.sell() << '\n';
+	   return 0;
        }
      #+end_src
 
@@ -124,43 +124,43 @@ Ref: https://github.com/tssovi/grokking-the-object-oriented-design-interview
      are relevant to other objects.
 
      #+begin_src cpp
-	    #include <iostream>
-	    using namespace std;
+       #include <iostream>
+       using namespace std;
 
-	    class Parent {
-	    public:
-	      Parent () = default;
-	      void common() {
-		cout << "Common Method\n";
-	      }
-	      virtual void vary() = 0;
-	    };
+       class Parent {
+       public:
+	   Parent () = default;
+	   void common() {
+	   cout << "Common Method\n";
+	   }
+	   virtual void vary() = 0;
+       };
 
-	    class FirstChild : public Parent {
-	    public:
-	      FirstChild() = default;
-	      void vary() override {
-		cout << "First Child\n";
-	      }
-	    };
+       class FirstChild : public Parent {
+       public:
+	   FirstChild() = default;
+	   void vary() override {
+	   cout << "First Child\n";
+	   }
+       };
 
-	    class SecondChild : public Parent {
-	    public:
-	      SecondChild() = default;
-	      void vary() override {
-		cout << "Second Child\n";
-	      }
-	    };
+       class SecondChild : public Parent {
+       public:
+	   SecondChild() = default;
+	   void vary() override {
+	   cout << "Second Child\n";
+	   }
+       };
 
-	    int main() {
-	      Parent *child1 = new FirstChild;
-	      Parent *child2 = new SecondChild;
-	      child1->vary();
-	      child1->common();
-	      child2->vary();
-	      child2->common();
-	      return 0;
-	    }
+       int main() {
+	   Parent *child1 = new FirstChild;
+	   Parent *child2 = new SecondChild;
+	   child1->vary();
+	   child1->common();
+	   child2->vary();
+	   child2->common();
+	   return 0;
+       }
      #+end_src
 
      #+RESULTS:
@@ -179,32 +179,32 @@ Ref: https://github.com/tssovi/grokking-the-object-oriented-design-interview
 
        class Animal {
        public:
-	 Animal() = default;
-	 virtual void makeSound() = 0;
+	   Animal() = default;
+	   virtual void makeSound() = 0;
        };
 
        class Dog : public Animal {
        public:
-	 Dog() = default;
-	 void makeSound() override {
+	   Dog() = default;
+	   void makeSound() override {
 	   cout << "Bark" << '\n';
-	 }
+	   }
        };
 
        class Cat : public Animal {
        public:
-	 Cat() = default;
-	 void makeSound() override {
+	   Cat() = default;
+	   void makeSound() override {
 	   cout << "Meow" << '\n';
-	 }
+	   }
        };
 
        int main() {
-	 Dog dog;
-         Cat cat;
-	 dog.makeSound();
-	 cat.makeSound();
-	 return 0;
+	   Dog dog;
+	   Cat cat;
+	   dog.makeSound();
+	   cat.makeSound();
+	   return 0;
        }
      #+end_src
 
@@ -223,45 +223,45 @@ Ref: https://github.com/tssovi/grokking-the-object-oriented-design-interview
 
        class ChessPiece {
        public:
-	 ChessPiece () = default;
-	 virtual void move() = 0;
-	 virtual void getName() = 0;
+	   ChessPiece () = default;
+	   virtual void move() = 0;
+	   virtual void getName() = 0;
        };
 
        class Bishop : public ChessPiece {
        public:
-	 Bishop() = default;
-	 void move() override {
+	   Bishop() = default;
+	   void move() override {
 	   cout << "Bishop can only move diagonally\n";
-	 }
-	 void getName() {
+	   }
+	   void getName() {
 	   cout << "Bishop\n";
-	 }
+	   }
        };
 
        class Knight : public ChessPiece{
        public:
-	 Knight() = default;
-	 void move() override {
+	   Knight() = default;
+	   void move() override {
 	   cout << "Knights can move two squares vertically and one horizontally or vice-versa\n";
-	 }
-	 void getName() {
+	   }
+	   void getName() {
 	   cout << "Knight\n";
-	 }
+	   }
        };
 
        void pieceName(ChessPiece *piece) {
-	 piece->getName();
+	   piece->getName();
        }
 
        int main() {
-	 ChessPiece *bishop = new Bishop;
-	 ChessPiece *knight = new Knight;
-	 bishop->move();
-	 knight->move();
-	 pieceName(bishop);
-	 pieceName(knight);
-	 return 0;
+	   ChessPiece *bishop = new Bishop;
+	   ChessPiece *knight = new Knight;
+	   bishop->move();
+	   knight->move();
+	   pieceName(bishop);
+	   pieceName(knight);
+	   return 0;
        }
      #+end_src
 
