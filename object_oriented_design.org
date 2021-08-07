@@ -1,0 +1,272 @@
+* Object Oriented Design
+
+Ref: https://github.com/tssovi/grokking-the-object-oriented-design-interview
+
+** Object Oriented Basics
+
+   It is a style of programming that focuses on using objects to
+   design and build applications.
+
+   - *Objects*: Objects represents a real-word entity and is the basic
+     building block of OOP.
+
+   - *Class*: Class is the blueprint of an Object.
+
+*** Shopping Cart Example:
+
+    #+begin_src cpp
+      #include <iostream>
+      #include <string>
+      #include <unordered_map>
+
+      using namespace std;
+
+      class ShoppingCart {
+      public:
+	ShoppingCart() = default;
+	~ShoppingCart() = default;
+
+	void addItem(const string &item_name, int quantity, double price) {
+	  this->total_ += (quantity * price);
+	  this->items_[item_name] = quantity;
+	}
+
+	void removeItem(const string &item_name, int quantity, double price) {
+	  if (this->items_.find(item_name) == end(this->items_)) {
+	    // Product not found.
+	    return;
+	  }
+	  this->total_ -= (quantity * price);
+	  if (quantity > this->items_[item_name]) {
+	    this->items_.erase(item_name);
+	    return;
+	  }
+	  this->items_[item_name] -= quantity;
+	}
+
+	string checkout(double cash_paid) {
+	  if (cash_paid < this->total_) {
+	    return "You paid " + to_string(cash_paid) + " but cart amount is " + to_string(this->total_);
+	  }
+	  double balance = cash_paid - this->total_;
+	  return "Exchange Amount: " + to_string(balance);
+	}
+
+      private:
+	double total_ = 0.0;
+	// {product_name, quantity}
+	unordered_map<string, int> items_;
+      };
+
+      int main() {
+	ShoppingCart cart;
+	cart.addItem("Apple", 10, 50);
+	cart.addItem("Kiwi", 8, 90);
+	cart.addItem("Bannana", 12, 40);
+	cart.removeItem("Bannana", 2, 5);
+	string cart_out = cart.checkout(2000);
+	cout << cart_out << '\n';
+	return 0;
+      }
+    #+end_src
+
+    #+RESULTS:
+    : Exchange Amount: 310.000000
+
+*** Four Pillars of OOP
+
+**** Encapsulation
+
+     Mechanism of binding the data together and hiding it from outside
+     world.
+
+     Example:
+     #+begin_src cpp
+       #include <iostream>
+
+       using namespace std;
+
+       class Product {
+       public:
+	 Product(double price) : price_(price) {}
+	 ~Product() = default;
+
+	 double sell() {
+	   return this->price_;
+	 }
+
+	 void setPrice(double price) {
+	   this->price_ = price;
+	 }
+  
+       private:
+	 double price_ = 0;
+       };
+
+       int main() {
+	 Product product(100);
+	 cout << "Selling Price: " << product.sell() << '\n';
+	 product.setPrice(200);
+	 cout << "Selling Price: " << product.sell() << '\n';
+	 return 0;
+       }
+     #+end_src
+
+     #+RESULTS:
+     | Selling | Price: | 100 |
+     | Selling | Price: | 200 |
+
+**** Abstraction
+
+     It means hiding all but the relevant data about an object in
+     order to reduce the complexity of the system. It helps hiding the
+     internal details of objects and only revealing operations that
+     are relevant to other objects.
+
+     #+begin_src cpp
+	    #include <iostream>
+	    using namespace std;
+
+	    class Parent {
+	    public:
+	      Parent () = default;
+	      void common() {
+		cout << "Common Method\n";
+	      }
+	      virtual void vary() = 0;
+	    };
+
+	    class FirstChild : public Parent {
+	    public:
+	      FirstChild() = default;
+	      void vary() override {
+		cout << "First Child\n";
+	      }
+	    };
+
+	    class SecondChild : public Parent {
+	    public:
+	      SecondChild() = default;
+	      void vary() override {
+		cout << "Second Child\n";
+	      }
+	    };
+
+	    int main() {
+	      Parent *child1 = new FirstChild;
+	      Parent *child2 = new SecondChild;
+	      child1->vary();
+	      child1->common();
+	      child2->vary();
+	      child2->common();
+	      return 0;
+	    }
+     #+end_src
+
+     #+RESULTS:
+     | First  | Child  |
+     | Common | Method |
+     | Second | Child  |
+     | Common | Method |
+
+**** Inheritance
+
+     Mechanism to inherit behaviour of any other class.
+
+     #+begin_src cpp
+       #include <iostream>
+       using namespace std;
+
+       class Animal {
+       public:
+	 Animal() = default;
+	 virtual void makeSound() = 0;
+       };
+
+       class Dog : public Animal {
+       public:
+	 Dog() = default;
+	 void makeSound() override {
+	   cout << "Bark" << '\n';
+	 }
+       };
+
+       class Cat : public Animal {
+       public:
+	 Cat() = default;
+	 void makeSound() override {
+	   cout << "Meow" << '\n';
+	 }
+       };
+
+       int main() {
+	 Dog dog;
+         Cat cat;
+	 dog.makeSound();
+	 cat.makeSound();
+	 return 0;
+       }
+     #+end_src
+
+     #+RESULTS:
+     | Bark |
+     | Meow |
+
+**** Polymorphism
+
+     Meaning - many forms. Ability of an object to take different
+     forms.
+
+     #+begin_src cpp
+       #include <iostream>
+       using namespace std;
+
+       class ChessPiece {
+       public:
+	 ChessPiece () = default;
+	 virtual void move() = 0;
+	 virtual void getName() = 0;
+       };
+
+       class Bishop : public ChessPiece {
+       public:
+	 Bishop() = default;
+	 void move() override {
+	   cout << "Bishop can only move diagonally\n";
+	 }
+	 void getName() {
+	   cout << "Bishop\n";
+	 }
+       };
+
+       class Knight : public ChessPiece{
+       public:
+	 Knight() = default;
+	 void move() override {
+	   cout << "Knights can move two squares vertically and one horizontally or vice-versa\n";
+	 }
+	 void getName() {
+	   cout << "Knight\n";
+	 }
+       };
+
+       void pieceName(ChessPiece *piece) {
+	 piece->getName();
+       }
+
+       int main() {
+	 ChessPiece *bishop = new Bishop;
+	 ChessPiece *knight = new Knight;
+	 bishop->move();
+	 knight->move();
+	 pieceName(bishop);
+	 pieceName(knight);
+	 return 0;
+       }
+     #+end_src
+
+     #+RESULTS:
+     | Bishop  | can | only | move | diagonally |            |     |     |              |    |            |
+     | Knights | can | move | two  | squares    | vertically | and | one | horizontally | or | vice-versa |
+     | Bishop  |     |      |      |            |            |     |     |              |    |            |
+     | Knight  |     |      |      |            |            |     |     |              |    |            |

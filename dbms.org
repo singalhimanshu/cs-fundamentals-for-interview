@@ -1,0 +1,427 @@
+* DBMS And SQL
+
+** DBMS
+
+*** Advantages of DBMS
+
+**** Data Independence
+
+     Change schema at one level without requiring to change schema at
+     higher level.
+
+**** Sharing of Data
+
+     It implies that the data are stored in one or more servers in the
+     network and that there is some software locking mechanism that
+     prevents the same set of data from being changed by two people at
+     the same time.
+
+**** Integrity Constraints
+
+     Integrity constraints are a set of rules. It is used to maintain
+     the quality of information.
+
+**** Redundancy Control
+
+     Control redundancy of data by integrating all the data into a
+     single database.
+
+**** Backup and Recover facility
+
+     Automatically create backups and restore whenever required.
+
+*** Aggregation
+
+    It allows relationship set to participate in another relationship
+    set.
+
+*** Atomicity
+
+    A database modification either follow all the rules or nothing at
+    all. So, if one part of the transaction fails, then the entire
+    transaction fails.
+
+*** Concurrency Control
+
+    Process of managing simultaneous operations in a database so that
+    the integrity contraints are maintained.
+
+    - Optimistic approach: Versioning
+    - Pessimistic approach: Locking
+
+*** ACID Properties
+
+    - *Atomicity*:
+
+      Each transaction is either all or nothing.
+
+    - *Consistency*:
+
+      Data must meet all validation rules. Transaction never leaves
+      the database without completing its state.
+      One valid state to another.
+
+    - *Isolation*:
+
+      Executing transactions concurrently has the same results as if
+      the trasactions were executed sequentially.
+
+    - *Durability*:
+
+      If a transaction has been committed, it will occur whatever may
+      be the scenario.
+
+*** Normalization
+
+    The process of organizing data to avoid any duplication of data
+    and avoid different anomalies (update, delete, insert).
+
+**** First Normal Form
+
+     Only atomic values.
+
+     | EMP_ID | EMP_NAME | EMP_PHONE              | EMP_STATE |
+     |     14 | John     | 7272826385, 9064738238 | UP        |
+     |     20 | Harry    | 8574783832             | Bihar     |
+     |     12 | Sam      | 7390372389, 8589830302 | Punjab    |
+
+     Write in different rows:
+
+     | EMP_ID | EMP_NAME |  EMP_PHONE | EMP_STATE |
+     |     14 | John     | 7272826385 | UP        |
+     |     14 | John     | 9064738238 | UP        |
+     |     20 | Harry    | 8574783832 | Bihar     |
+     |     12 | Sam      | 7390372389 | Punjab    |
+     |     12 | Sam      | 8589830302 | Punjab    |
+
+**** Second Normal Form
+
+     Every non-key attribute is dependent on the whole primary key
+     (not just a subset).
+
+     | TEACHER_ID | SUBJECT   | TEACHER_AGE |
+     |         25 | Chemistry |          30 |
+     |         25 | Biology   |          30 |
+     |         47 | English   |          35 |
+     |         83 | Math      |          38 |
+     |         83 | Computer  |          38 |
+
+     TEACHER_AGE is dependent upon TEACHER_ID which is a proper subset
+     of a candidate key.
+
+     | TEACHER_ID | TEACHER_AGE |
+     |         25 |          30 |
+     |         47 |          35 |
+     |         83 |          38 |
+
+     | TEACHER_ID | SUBJECT   |
+     |         25 | Chemistry |
+     |         25 | Biology   |
+     |         47 | English   |
+     |         83 | Math      |
+     |         83 | Computer  |
+
+**** Third Normal Form
+
+     No transitive dependency for non-prime attributes.
+
+     | EMP_ID | EMP_NAME  | EMP_ZIP | EMP_STATE | EMP_CITY |
+     |    222 | Harry     |  201010 | UP        | Noida    |
+     |    333 | Stephan   |   02228 | US        | Boston   |
+     |    444 | Lan       |   60007 | US        | Chicago  |
+     |    555 | Katharine |   06389 | UK        | Norwich  |
+     |    666 | John      |  462007 | MP        | Bhopal   |
+
+     Super Key: {EMP_ID}, {EMP_ID, EMP_NAME}, {EMP_ID, EMP_NAME, EMP_ZIP} ...
+     Candidate Key: {EMP_ID}
+
+     EMP_STATE & EMP_CITY dependent on EMP_ZIP and EMP_ZIP dependent
+     on EMP_ID.
+
+     | EMP_ID | EMP_NAME  | EMP_ZIP |
+     |    222 | Harry     |  201010 |
+     |    333 | Stephan   |   02228 |
+     |    444 | Lan       |   60007 |
+     |    555 | Katharine |   06389 |
+     |    666 | John      |  462007 |
+
+     | EMP_ZIP | EMP_STATE | EMP_CITY |
+     |  201010 | UP        | Noida    |
+     |   02228 | US        | Boston   |
+     |   60007 | US        | Chicago  |
+     |   06389 | UK        | Norwich  |
+     |  462007 | MP        | Bhopal   |
+     
+**** BCNF
+
+     For every functional dependency X->Y, X is the super key of the
+     table.
+
+     | EMP_ID | EMP_COUNTRY | EMP_DEPT   | DEPT_TYPE | EMP_DEPT_NO |
+     |    264 | India       | Designing  | D394      |         283 |
+     |    264 | India       | Testing    | D394      |         300 |
+     |    364 | UK          | Stores     | D283      |         232 |
+     |    364 | UK          | Developing | D283      |         549 |
+
+     EMP_ID -> EMP_COUNTRY
+     EMP_DEPT -> {DEPT_TYPE, EMP_DEPT_NO}
+
+     | EMP_ID | EMP_COUNTRY |
+     |    264 | India       |
+     |    264 | India       |
+
+     | EMP_DEPT   | DEPT_TYPE | EMP_DEPT_NO |
+     | Designing  | D394      |         283 |
+     | Testing    | D394      |         300 |
+     | Stores     | D283      |         232 |
+     | Developing | D283      |         549 |
+
+     | EMP_ID | EMP_DEPT |
+     | D394   |      283 |
+     | D394   |      300 |
+     | D283   |      232 |
+     | D283   |      549 |
+     
+**** Fourth Normal Form
+
+     A realation will be in 4NF if it has no multi-valued
+     dependency. For a dependency A->B, if for a single value of A,
+     multiple values of B exists, then the relation will be
+     multi-valued dependency.
+
+     | Student ID | Course    | Hobby   |
+     |         21 | Computer  | Dancing |
+     |         21 | Math      | Singing |
+     |         34 | Chemistry | Dancing |
+     |         74 | Biology   | Cricket |
+     |         59 | Physics   | Hockey  |
+
+     Student ID -> Course, Student ID -> Hobby
+
+     This is not allowed so we split the table:
+
+     | Student ID | Course    |
+     |         21 | Computer  |
+     |         21 | Math      |
+     |         34 | Chemistry |
+     |         74 | Biology   |
+     |         59 | Physics   |
+     
+
+     | Student ID | Hobby   |
+     |         21 | Dancing |
+     |         21 | Singing |
+     |         34 | Dancing |
+     |         74 | Cricket |
+     |         59 | Hockey  |
+
+     | EMP_ID | EMP_DEPT |
+     | D394   |      283 |
+     | D394   |      300 |
+     | D283   |      232 |
+     | D283   |      549 |
+
+*** Indexing
+
+    Indexing is used to optimize the performance of a database by
+    minimizing the number of disk accesses required when a query is
+    processed.
+
+    | Search Key | Data Reference |
+
+*** RAID
+
+    Redundancy array of independent disk. It is used to connect
+    multiple storage device for increased performance, data redundancy
+    or both.
+
+*** Storage Engine
+
+    Underlying software that a DBMS uses to create, read, update,
+    delete data from a database.
+    
+*** Sharding
+
+    Distributing data across different databases such that each
+    database can only manager a subset of the data.  Example: Shard a
+    user database based on the starting character of the name like -
+    'a' to 'l' in one shard and 'm' to 'z' in another shard. Or shard
+    based on the geographic location.
+
+    *Advantages*:
+
+    - Less read and write traffic on a single db, less replication,
+      more cache hits.
+    - Index size is reduced which makes the queries faster.
+    - If one shard goes down the other shards are still working, note
+      that sharding is not a solution for single point of failure, you
+      shoud have some replication of db for that.
+
+    *Disadvantages*:
+
+    - Complex SQL queries
+    - The traffic on certain shard can increase a lot if the sharding
+      is not done on a good parameter.
+    - Joining data from shards is complex.
+    - Adds more hardware and additional complexity.
+    
+*** Denormalization
+
+    It is opposite of normalization as the name suggests.
+
+    *Advantages*:
+
+    - It attempts to improve read performance at some expense of write
+      performance.
+    - Redundant copies of the data are written to avoid expensive joins.
+    - After techniques like sharding the join operations become more
+      expensive so denormalization might solve that problem to some
+      extent.
+
+    *Disadvantages*:
+
+    - Duplication of data.
+    - Redundant information stay in sync, which increases the
+      complexity of db design.
+    - Heavy write system might get negatively impacted by denormalization.
+
+
+
+** SQL
+
+   Structured Query Language. It is used to store and manage data in a
+   RDBMS.
+
+*** Datatypes
+
+***** Binary Datatypes
+
+ | Data Type | Description                                                                              |
+ | binary    | It has a maximum length of 8000 bytes. It contains fixed-length binary data.             |
+ | varbinary | It has a maximum length of 8000 bytes. It contains variable-length binary data.          |
+ | image     | It has a maximum length of 2,147,483,647 bytes. It contains variable-length binary data. |
+   
+***** Approximate Numeric Datatype
+
+      - Float
+      - Real
+
+***** Exact Numeric Datatype
+
+      - Int
+      - Smallint
+      - bit
+      - decimal
+      - numeric
+
+***** Character String Datatype
+
+      - char
+      - varchar
+      - text
+
+***** Date and time Datatypes
+
+      - date
+      - time
+      - timestamp
+
+*** Commands
+
+**** Data Definition Language (DDL)
+
+     - CREATE
+       Format:
+       CREATE TABLE TABLE_NAME (COLUMN_NAME DATATYPE);
+       Eg:
+       =CREATE TABLE EMPLOYEE(Name VARCHAR2(20), Email VARCHAR2(100), DOB DATE);=
+
+     - DROP
+       Format:
+       DROP TABLE table_name;
+       Eg:
+       =DROP TABLE EMPLOYEE;=
+
+     - ALTER
+       Format:
+       =ALTER TABLE table_name ADD column_name COLUMN-DEFINITION;=
+
+     - TRUNCATE
+       Format:
+       TRUNCATE TABLE table_name;
+       Eg:
+       =TRUNCATE TABLE EMPLOYEE;=
+
+**** Data Manipulation Language
+
+     - INSERT
+       Format:
+       INSERT INTO TABLE_NAME
+       (col1, col2, ...)
+       VALUES (value1, value2, ...);
+
+       Example:
+       =INSERT INTO javatpoint (Author, Subject) VALUES ("Sonoo", "DBMS");=
+
+     - UPDATE
+       Format:
+        UPDATE table_name SET [column_name1= value1,...column_nameN = valueN]
+        [WHERE CONDITION];
+
+       Eg:
+        =UPDATE students SET User_Name = 'Sonoo' WHERE Student_Id = '3';=
+
+     - DELETE
+       Format:
+       DELETE FROM table_name [WHERE condition];  
+
+       Eg:
+       =DELETE FROM javatpoint WHERE Author="Someone";=
+
+**** Data Control Language
+
+     - Grant:
+
+       =GRANT SELECT, UPDATE ON MY_TABLE TO SOME_USER, ANOTHER_USER;=
+
+     - Revoke:
+
+       =REVOKE SELECT, UPDATE ON MY_TABLE FROM USER1, USER2;=
+
+**** Transaction Control Language
+
+     - COMMIT
+       Used to save all the transactions to the database.
+
+       Eg:
+       DELETE FROM CUSTOMERS
+       WHERE AGE = 25;
+       COMMIT;
+
+     - ROLLBACK
+       Undo transactions that have not already been saved to the database.
+
+       Eg:
+       DELETE FROM CUSTOMERS
+       WERE AGE = 25;
+       ROLLBACK;
+
+     - SAVEPOINT
+
+       Format:
+       SAVEPOINT SAVEPOINT_NAME;
+
+**** Data Query Language
+
+     - SELECT
+
+       Format:
+       SELECT expressions
+       FROM TABLE_NAME
+       WHERE conditions;
+
+       Example:
+       SELECT emp_name
+       FROM employee
+       WHERE age > 20;
+
