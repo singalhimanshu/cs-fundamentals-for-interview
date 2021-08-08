@@ -221,6 +221,179 @@
      | D283   |      232 |
      | D283   |      549 |
 
+*** Joins
+    Ref: https://www.javatpoint.com/dbms-sql-joins
+
+    Combining two or more tables based on some condition.
+
+**** Types of Joins
+
+     - *INNER JOIN*:
+
+       Selects records that have matching values in both tables as
+       long as the condition is satisfied.
+
+       *Example*:
+
+       Employee Table:
+
+       | EMP_ID | EMP_NAME  | CITY       | SALARY | AGE |
+       |      1 | Angelina  | Chicago    | 200000 |  30 |
+       |      2 | Robert    | Austin     | 300000 |  26 |
+       |      3 | Christian | Denver     | 100000 |  42 |
+       |      4 | Kristen   | Washington | 500000 |  29 |
+       |      5 | Russell   | Los angels | 200000 |  36 |
+       |      6 | Marry     | Canada     | 600000 |  48 |
+
+       Project Table:
+
+       | PROJECT_NO | EMP_ID | DEPARTMENT  |
+       |        101 |      1 | Testing     |
+       |        102 |      2 | Development |
+       |        103 |      3 | Designing   |
+       |        104 |      4 | Development |
+
+       #+begin_src sql
+	 SELECT Employee.EMP_NAME, Project.DEPARTMENT
+	 FROM Employee
+	 INNER JOIN Project
+	 ON Project.EMP_ID = Employee.EMP_ID;
+       #+end_src
+
+       *Output*:
+
+        | EMP_NAME  | DEPARTMENT  |
+        | Angelina  | Testing     |
+        | Robert    | Development |
+        | Christian | Designing   |
+        | Kristen   | Development |
+
+     - *LEFT JOIN*:
+
+       Returns all the values from left table and the matching values
+       from the right table. If there is no match, it will return =NULL=.
+
+       *Example*:
+
+       Employee Table:
+
+       | EMP_ID | EMP_NAME  | CITY       | SALARY | AGE |
+       |      1 | Angelina  | Chicago    | 200000 |  30 |
+       |      2 | Robert    | Austin     | 300000 |  26 |
+       |      3 | Christian | Denver     | 100000 |  42 |
+       |      4 | Kristen   | Washington | 500000 |  29 |
+       |      5 | Russell   | Los angels | 200000 |  36 |
+       |      6 | Marry     | Canada     | 600000 |  48 |
+
+       Project Table:
+
+       | PROJECT_NO | EMP_ID | DEPARTMENT  |
+       |        101 |      1 | Testing     |
+       |        102 |      2 | Development |
+       |        103 |      3 | Designing   |
+       |        104 |      4 | Development |
+
+       #+begin_src sql
+	 SELECT Employee.EMP_NAME, Project.DEPARTMENT
+	 FROM Employee
+	 LEFT JOIN Project
+	 ON Project.EMP_ID = Employee.EMP_ID;
+       #+end_src
+
+       *Output*:
+
+        | EMP_NAME  | DEPARTMENT  |
+        | Angelina  | Testing     |
+        | Robert    | Development |
+        | Christian | Designing   |
+        | Kristen   | Development |
+        | Russell   | NULL        |
+        | Marry     | NULL        |
+
+     - *RIGHT JOIN*:
+
+       Returns all the values from the right table and the matched
+       values from the left table. If there is no matching values, it
+       will return =NULL=.
+
+       *Example*:
+
+       Employee Table:
+
+       | EMP_ID | EMP_NAME  | CITY       | SALARY | AGE |
+       |      1 | Angelina  | Chicago    | 200000 |  30 |
+       |      2 | Robert    | Austin     | 300000 |  26 |
+       |      3 | Christian | Denver     | 100000 |  42 |
+       |      4 | Kristen   | Washington | 500000 |  29 |
+       |      5 | Russell   | Los angels | 200000 |  36 |
+       |      6 | Marry     | Canada     | 600000 |  48 |
+
+       Project Table:
+
+       | PROJECT_NO | EMP_ID | DEPARTMENT  |
+       |        101 |      1 | Testing     |
+       |        102 |      2 | Development |
+       |        103 |      3 | Designing   |
+       |        104 |      4 | Development |
+
+       #+begin_src sql
+	 SELECT Employee.EMP_NAME, Project.DEPARTMENT
+	 FROM Employee
+	 RIGHT JOIN Project
+	 ON Project.EMP_ID = Employee.EMP_ID;
+       #+end_src
+
+       *Output*:
+
+        | EMP_NAME  | DEPARTMENT  |
+        | Angelina  | Testing     |
+        | Robert    | Development |
+        | Christian | Designing   |
+        | Kristen   | Development |
+
+     - *FULL JOIN*:
+
+       It is the result of a combination of both left and right outer
+       join. Returns all the record from both tables, if no match is
+       found it will return NULL.
+
+       *Example*:
+
+       Employee Table:
+
+       | EMP_ID | EMP_NAME  | CITY       | SALARY | AGE |
+       |      1 | Angelina  | Chicago    | 200000 |  30 |
+       |      2 | Robert    | Austin     | 300000 |  26 |
+       |      3 | Christian | Denver     | 100000 |  42 |
+       |      4 | Kristen   | Washington | 500000 |  29 |
+       |      5 | Russell   | Los angels | 200000 |  36 |
+       |      6 | Marry     | Canada     | 600000 |  48 |
+
+       Project Table:
+
+       | PROJECT_NO | EMP_ID | DEPARTMENT  |
+       |        101 |      1 | Testing     |
+       |        102 |      2 | Development |
+       |        103 |      3 | Designing   |
+       |        104 |      4 | Development |
+
+       #+begin_src sql
+	 SELECT Employee.EMP_NAME, Project.DEPARTMENT
+	 FROM Employee
+	 FULL JOIN Project
+	 ON Project.EMP_ID = Employee.EMP_ID;
+       #+end_src
+
+       *Output*:
+
+        | EMP_NAME  | DEPARTMENT  |
+        | Angelina  | Testing     |
+        | Robert    | Development |
+        | Christian | Designing   |
+        | Kristen   | Development |
+        | Russell   | NULL        |
+        | Marry     | NULL        |
+    
 *** Indexing
 
     Indexing is used to optimize the performance of a database by
@@ -239,6 +412,28 @@
 
     Underlying software that a DBMS uses to create, read, update,
     delete data from a database.
+    
+*** Federation
+    Ref: https://github.com/donnemartin/system-design-primer#federation
+
+    Federation (also known as functional partitioning) splits up the
+    db by functions. Example a db can be split up into *forums*,
+    *users*, and *products*.
+
+    *Advantages*:
+
+    - Less read and write traffic to each db.
+    - Less replication lag.
+    - Better caching since the db is small.
+    - Enables parallel writes, increasing throughput.
+
+    *Disadvantages*:
+
+    - Not effective if your schema requires huge functions or tables.
+    - Some complexity in the application logic to determine which db
+      to read/write from.
+    - Joins becomes more complex and slow.
+    - Additional hardware and complexity.
     
 *** Sharding
 
