@@ -254,10 +254,10 @@
        |        104 |      4 | Development |
 
        #+begin_src sql
-	 SELECT Employee.EMP_NAME, Project.DEPARTMENT
-	 FROM Employee
-	 INNER JOIN Project
-	 ON Project.EMP_ID = Employee.EMP_ID;
+ SELECT Employee.EMP_NAME, Project.DEPARTMENT
+ FROM Employee
+ INNER JOIN Project
+ ON Project.EMP_ID = Employee.EMP_ID;
        #+end_src
 
        *Output*:
@@ -294,10 +294,10 @@
        |        104 |      4 | Development |
 
        #+begin_src sql
-	 SELECT Employee.EMP_NAME, Project.DEPARTMENT
-	 FROM Employee
-	 LEFT JOIN Project
-	 ON Project.EMP_ID = Employee.EMP_ID;
+ SELECT Employee.EMP_NAME, Project.DEPARTMENT
+ FROM Employee
+ LEFT JOIN Project
+ ON Project.EMP_ID = Employee.EMP_ID;
        #+end_src
 
        *Output*:
@@ -337,10 +337,10 @@
        |        104 |      4 | Development |
 
        #+begin_src sql
-	 SELECT Employee.EMP_NAME, Project.DEPARTMENT
-	 FROM Employee
-	 RIGHT JOIN Project
-	 ON Project.EMP_ID = Employee.EMP_ID;
+ SELECT Employee.EMP_NAME, Project.DEPARTMENT
+ FROM Employee
+ RIGHT JOIN Project
+ ON Project.EMP_ID = Employee.EMP_ID;
        #+end_src
 
        *Output*:
@@ -378,10 +378,10 @@
        |        104 |      4 | Development |
 
        #+begin_src sql
-	 SELECT Employee.EMP_NAME, Project.DEPARTMENT
-	 FROM Employee
-	 FULL JOIN Project
-	 ON Project.EMP_ID = Employee.EMP_ID;
+ SELECT Employee.EMP_NAME, Project.DEPARTMENT
+ FROM Employee
+ FULL JOIN Project
+ ON Project.EMP_ID = Employee.EMP_ID;
        #+end_src
 
        *Output*:
